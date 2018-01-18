@@ -25,17 +25,17 @@ def max_heapify(data, index):
     right_child = right(index)
 
     if left_child is not None:
+        max_heapify(data, left_child)
         if data[left_child] > data[index]:
             data[left_child], data[index] = data[index], data[left_child]
-
-        max_heapify(data, left_child)
+            max_heapify(data, index)
 
     if right_child is not None:
-
+        max_heapify(data, right_child)
         if data[right_child] > data[index]:
             data[right_child], data[index] = data[index], data[right_child]
+            max_heapify(data, index)
 
-        max_heapify(data, right_child)
 
 
 def check_if_heap(data):
