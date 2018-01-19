@@ -2,13 +2,14 @@ from unittest import TestCase, main
 from random import randint
 from heap_sorter import HeapSorter
 
+from timeit import timeit
+
 
 class TestHeapSortCorrectness(TestCase):
     def generate_test_list_data(self):
         self.data = [randint(0, 9999) for _ in range(500)]
 
     def is_sorted(self, data, reverse=False):
-
         return all(data[i] <= data[i+1] for i in range(len(data)-1)) if not reverse \
             else all(data[i] >= data[i+1] for i in range(len(data)-1))
 
@@ -29,3 +30,12 @@ class TestHeapSortCorrectness(TestCase):
 
 if __name__ == '__main__':
     main()
+    setup = ('from heap_sorter import HeapSorter;'
+             'from random import randint;'
+             'data = [randint(0, 999) for _ in range(5)];')
+
+    print('#####Time comparison')
+    print('### my implementation:')
+    print(timeit('HeapSorter.heap_sort(data)', setup=setup))
+    print('### python standard sort:')
+    print(timeit('data.sort()', setup=setup))

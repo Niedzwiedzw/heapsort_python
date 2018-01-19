@@ -29,13 +29,13 @@ class HeapSorter:
 
         if left_child is not None:
             self._max_heapify(left_child)
-            if self.key(self._data[left_child]) >= self.key(self._data[index]):
+            if self.key(self._data[left_child]) > self.key(self._data[index]):
                 self._data[left_child], self._data[index] = self._data[index], self._data[left_child]
                 self._max_heapify(left_child)
 
         if right_child is not None:
             self._max_heapify(right_child)
-            if self.key(self._data[right_child]) >= self.key(self._data[index]):
+            if self.key(self._data[right_child]) > self.key(self._data[index]):
                 self._data[right_child], self._data[index] = self._data[index], self._data[right_child]
                 self._max_heapify(right_child)
 
@@ -45,13 +45,13 @@ class HeapSorter:
 
         if left_child is not None:
             self._min_heapify(left_child)
-            if self.key(self._data[left_child]) <= self.key(self._data[index]):
+            if self.key(self._data[left_child]) < self.key(self._data[index]):
                 self._data[left_child], self._data[index] = self._data[index], self._data[left_child]
                 self._min_heapify(left_child)
 
         if right_child is not None:
             self._min_heapify(right_child)
-            if self.key(self._data[right_child]) <= self.key(self._data[index]):
+            if self.key(self._data[right_child]) < self.key(self._data[index]):
                 self._data[right_child], self._data[index] = self._data[index], self._data[right_child]
                 self._min_heapify(right_child)
 

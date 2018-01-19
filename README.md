@@ -1,7 +1,7 @@
 # HeapSort implemented in Python
 `by niedzwiedzwo@gmail.com`
 
-I struggled to find an implementation of the alorithm that I would find readable, so here it is.
+I struggled to find an implementation of the algorithm that I would find readable, so here it is.
 It uses Python 3.5+ feature `-> type hints`.
 
 ## basic usage
