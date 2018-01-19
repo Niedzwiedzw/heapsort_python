@@ -28,14 +28,29 @@ class TestHeapSortCorrectness(TestCase):
             self.assertTrue(self.is_sorted(self.data, reverse=True))
             self.generate_test_list_data()
 
+
+def bubble_sort(alist):
+    for passnum in range(len(alist)-1,0,-1):
+        for i in range(passnum):
+            if alist[i]>alist[i+1]:
+                temp = alist[i]
+                alist[i] = alist[i+1]
+                alist[i+1] = temp
+
+
 if __name__ == '__main__':
     main()
     setup = ('from heap_sorter import HeapSorter;'
              'from random import randint;'
-             'data = [randint(0, 999) for _ in range(5)];')
+             'data = [randint(0, 90) for _ in range(5)];'
+             'from __main__ import bubble_sort')
 
     print('#####Time comparison')
     print('### my implementation:')
     print(timeit('HeapSorter.heap_sort(data)', setup=setup))
-    print('### python standard sort:')
-    print(timeit('data.sort()', setup=setup))
+    print('### bubble sort:')
+    print(timeit('bubble_sort(data)', setup=setup))
+
+    import cProfile
+
+    cProfile.run('HeapSorter.heap_sort([5,2,11,45,6456,3,646,2,3,23,4,41,412,4,24,515,12])')
