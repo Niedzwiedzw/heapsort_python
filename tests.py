@@ -42,14 +42,18 @@ if __name__ == '__main__':
     main()
     setup = ('from heap_sorter import HeapSorter;'
              'from random import randint;'
-             'data = [randint(0, 90) for _ in range(5)];'
+             'data = [randint(0, 90) for _ in range(1000)];'
              'from __main__ import bubble_sort')
 
     print('#####Time comparison')
     print('### my implementation:')
-    print(timeit('HeapSorter.heap_sort(data)', setup=setup))
+    print(timeit('HeapSorter.heap_sort(data)',
+                 setup=setup,
+                 number=10))
     print('### bubble sort:')
-    print(timeit('bubble_sort(data)', setup=setup))
+    print(timeit('bubble_sort(data)',
+                 setup=setup,
+                 number=10))
 
     import cProfile
 

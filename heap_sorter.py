@@ -6,61 +6,94 @@ class HeapSorter:
         '''
 
         :param data: list of items you wish to sort
-        :param key: function which takes a list element and returns a value by which the list should be sorted
+        :param key: function which takes an element and returns a value by which the list should be sorted by
         :param reverse: should the list be sorted in reverse ourder?
         '''
         self._data = data
-        self.heap_size = len(self._data)
-        self.key = key
+        self._key = key
 
-        self._heapify = self._min_heapify if reverse else self._max_heapify
+        self._heapify = getattr(self, '{}_heapify{}'.format('_min' if reverse else '_max',
+                                                            '_keyed' if key is not None else ''))
 
-    def _left(self, index: int) -> int:
-        child_index = 2 * index + 1
-        return child_index if child_index < self.heap_size else None
+    def _max_heapify(self, heap_size, index):
+        data = self._data
+        largest = index
+        left = 2 * index + 1
+        right = 2 * index + 2
 
-    def _right(self, index: int) -> int:
-        child_index = 2 * index + 2
-        return child_index if child_index < self.heap_size else None
+        if left < heap_size and data[index] < data[left]:
+            largest = left
 
-    def _max_heapify(self, index: int) -> None:
-        left_child = self._left(index)
-        right_child = self._right(index)
+        if right < heap_size and data[largest] < data[right]:
+            largest = right
 
-        if left_child is not None:
-            self._max_heapify(left_child)
-            if self.key(self._data[left_child]) > self.key(self._data[index]):
-                self._data[left_child], self._data[index] = self._data[index], self._data[left_child]
-                self._max_heapify(left_child)
+        if largest != index:
+            data[index], data[largest] = data[largest], data[index]  # swap
 
-        if right_child is not None:
-            self._max_heapify(right_child)
-            if self.key(self._data[right_child]) > self.key(self._data[index]):
-                self._data[right_child], self._data[index] = self._data[index], self._data[right_child]
-                self._max_heapify(right_child)
+            self._heapify(heap_size, largest)
 
-    def _min_heapify(self, index: int) -> None:
-        left_child = self._left(index)
-        right_child = self._right(index)
+    def _min_heapify(self, heap_size, index):
+        data = self._data
+        largest = index
+        left = 2 * index + 1
+        right = 2 * index + 2
 
-        if left_child is not None:
-            self._min_heapify(left_child)
-            if self.key(self._data[left_child]) < self.key(self._data[index]):
-                self._data[left_child], self._data[index] = self._data[index], self._data[left_child]
-                self._min_heapify(left_child)
+        if left < heap_size and data[index] > data[left]:
+            largest = left
 
-        if right_child is not None:
-            self._min_heapify(right_child)
-            if self.key(self._data[right_child]) < self.key(self._data[index]):
-                self._data[right_child], self._data[index] = self._data[index], self._data[right_child]
-                self._min_heapify(right_child)
+        if right < heap_size and data[largest] > data[right]:
+            largest = right
 
-    def _heap_sort(self) -> None:
-        while self.heap_size > 0:
-            self._heapify(0)
-            self._data[0], self._data[self.heap_size - 1] = self._data[self.heap_size - 1], self._data[0]
-            self.heap_size -= 1
+        if largest != index:
+            data[index], data[largest] = data[largest], data[index]  # swap
+
+            self._heapify(heap_size, largest)
+
+    def _max_heapify_keyed(self, heap_size, index):
+        data = self._data
+        largest = index
+        left = 2 * index + 1
+        right = 2 * index + 2
+
+        if left < heap_size and self._key(data[index]) < self._key(data[left]):
+            largest = left
+
+        if right < heap_size and self._key(data[largest]) < self._key(data[right]):
+            largest = right
+
+        if largest != index:
+            data[index], data[largest] = data[largest], data[index]  # swap
+
+            self._heapify(heap_size, largest)
+
+    def _min_heapify_keyed(self, heap_size, index):
+        data = self._data
+        largest = index
+        left = 2 * index + 1
+        right = 2 * index + 2
+
+        if left < heap_size and self._key(data[index]) > self._key(data[left]):
+            largest = left
+
+        if right < heap_size and self._key(data[largest]) > self._key(data[right]):
+            largest = right
+
+        if largest != index:
+            data[index], data[largest] = data[largest], data[index]  # swap
+
+            self._heapify(heap_size, largest)
+
+    def _heap_sort(self):
+        data = self._data
+        heap_size = len(data)
+
+        for index in range(heap_size, -1, -1):
+            self._heapify(heap_size, index)
+
+        for index in range(heap_size - 1, 0, -1):
+            data[index], data[0] = data[0], data[index]  # swap
+            self._heapify(index, 0)
 
     @classmethod
-    def heap_sort(cls, data: List, key: Callable=lambda x: x, reverse: bool=False) -> None:
+    def heap_sort(cls, data: List, key: Callable or None=None, reverse: bool=False) -> None:
         cls(data=data, key=key, reverse=reverse)._heap_sort()
